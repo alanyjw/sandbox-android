@@ -2,8 +2,8 @@ resources:
 - name: sandbox-android
   type: git
   source:
-    uri: https://github.com/xaethos/sandbox-android.git
-    branch: concourse
+    uri: https://github.com/alanyjw/sandbox-android.git
+    branch: master
 
 jobs:
 - name: unit-test
@@ -11,4 +11,21 @@ jobs:
   - get: sandbox-android
     trigger: true
   - task: test
+    tags:
+    - redhouse
     file: sandbox-android/ci/unit-test.yml
+- name: devices
+  plan:
+  - task: list-devices
+    tags:
+    - redhouse
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: alanyjw/android-sandbox
+      run:
+        path: /usr/local/android-sdk-linux/platform-tools/adb
+        args:
+        - devices

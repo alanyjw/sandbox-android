@@ -1,9 +1,13 @@
-FROM xaethos/android-base
+FROM alanyjw/android-base
 
 # Install SDK 23 and build tools
 RUN echo y | $ANDROID_HOME/tools/android update sdk --all --no-ui --filter \
-build-tools-23.0.2,\
+build-tools-23.0.3,\
 android-23
+
+EXPOSE 5037
+
+ENV HOST_IP $(netstat -nr | grep '^0\.0\.0\.0' | awk '{print $2}')
 
 # Warm up Maven dependency cache
 COPY . project/
