@@ -4,16 +4,29 @@ resources:
   source:
     uri: https://github.com/alanyjw/sandbox-android.git
     branch: master
+- name: google-android-testing
+  type: git
+  source:
+    uri: https://github.com/alanyjw/basic-sample-espresso-testing.git
+    branch: master
 
 jobs:
-- name: unit-test
+- name: sandbox-unit-test
   plan:
   - get: sandbox-android
     trigger: true
   - task: test
     tags:
     - redhouse
-    file: sandbox-android/ci/unit-test.yml
+    file: sandbox-android/ci/sandbox-unit-test.yml
+- name: espresso-test
+  plan:
+    - get: google-android-testing
+      trigger: true
+    - task: test
+      tags:
+      - redhouse
+      file: google-android-testing/ci/espresso-test.yml
 - name: devices
   plan:
   - task: list-devices
