@@ -20,6 +20,7 @@ jobs:
     file: sandbox-android/ci/sandbox-unit-test.yml
 - name: android-test
   plan:
+  - get: sandbox-android
   - get: google-android-testing
     trigger: true
   - task: assemble-instrumentation
