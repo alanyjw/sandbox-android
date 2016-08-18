@@ -7,8 +7,6 @@ android-23
 
 EXPOSE 5037
 
-ENV HOST_IP $(netstat -nr | grep '^0\.0\.0\.0' | awk '{print $2}')
-
 # Warm up Maven dependency cache
 COPY . project/
 

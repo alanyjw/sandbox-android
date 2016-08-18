@@ -1,0 +1,22 @@
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: alanyjw/android-sandbox
+
+inputs:
+- name: google-android-testing
+- name: instrument-apk
+
+params:
+  ANDROID_SERIAL: 487cb2b4
+
+run:
+  path: sh
+  args:
+  - -exc
+  - |
+    $ANDROID_HOME/platform-tools/adb -H `netstat -nr | grep '^0\.0\.0\.0' | awk '{print $2}'` install -r instrument-apk/app-debug.apk
+    $ANDROID_HOME/platform-tools/adb -H `netstat -nr | grep '^0\.0\.0\.0' | awk '{print $2}'` install -r instrument-apk/app-debug-androidTest-unaligned.apk
+    $ANDROID_HOME/platform-tools/adb -H `netstat -nr | grep '^0\.0\.0\.0' | awk '{print $2}'` shell am instrument -w com.example.android.testing.espresso.BasicSample/android.support.test.runner.AndroidJUnitRunner

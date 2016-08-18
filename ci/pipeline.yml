@@ -16,29 +16,14 @@ jobs:
   - get: sandbox-android
     trigger: true
   - task: test
-    tags:
-    - redhouse
+    tags: [android]
     file: sandbox-android/ci/sandbox-unit-test.yml
-- name: espresso-test
+- name: android-test
   plan:
-    - get: google-android-testing
-      trigger: true
-    - task: test
-      tags:
-      - redhouse
-      file: google-android-testing/ci/espresso-test.yml
-- name: devices
-  plan:
-  - task: list-devices
-    tags:
-    - redhouse
-    config:
-      platform: linux
-      image_resource:
-        type: docker-image
-        source:
-          repository: alanyjw/android-sandbox
-      run:
-        path: /usr/local/android-sdk-linux/platform-tools/adb
-        args:
-        - devices
+  - get: google-android-testing
+    trigger: true
+  - task: assemble-instrumentation
+    file: sandbox-android/ci/assemble-instrumentation.yml
+  - task: instrument
+    tags: [android]
+    file: sandbox-android/ci/instrument.yml
